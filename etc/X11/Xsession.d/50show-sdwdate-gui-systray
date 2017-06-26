@@ -1,3 +1,6 @@
+## Copyright (C) 2017 - 2017 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions
+
 if [ -z "$XDG_CONFIG_DIRS" ]; then
    XDG_CONFIG_DIRS=/etc/xdg
 fi
