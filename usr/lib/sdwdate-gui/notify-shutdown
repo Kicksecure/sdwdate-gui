@@ -5,8 +5,6 @@
 
 set -x
 
-NAME="$(/usr/bin/qubesdb-read /name)"
-
 shopt -s nullglob
 for i in \
    /etc/sdwdate-gui.d/*.conf \
@@ -21,8 +19,6 @@ if [ "$gateway" = "" ]; then
    gateway=sys-whonix
 fi
 
-if [ ! -z "$NAME" ]; then
-    /usr/bin/qrexec-client-vm "$gateway" whonix.NewStatus+$NAME" shutdown"
-fi
+qrexec-client-vm "$gateway" whonix.NewStatus" shutdown"
 
 true

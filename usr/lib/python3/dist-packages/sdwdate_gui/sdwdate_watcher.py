@@ -18,15 +18,6 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class SdwdateStatusWatch:
     def __init__(self, parent=None):
-        try:
-            self.name = check_output(['qubesdb-read', '/name']).decode().strip()
-            #if self.name.startswith('disp'):
-                #sys.exit(0)
-        except:
-            error_msg = "Unexpected error during init: " + str(sys.exc_info()[0])
-            print(error_msg)
-            self.name = 'name'
-
         self.status_path = '/run/sdwdate/status'
 
         ## get status on loading.
@@ -69,7 +60,7 @@ class SdwdateStatusWatch:
                         if line.startswith('gateway'):
                               gateway = re.search(r'=(.*)', line).group(1)
 
-            command = 'qrexec-client-vm %s whonix.NewStatus+"%s"' % (gateway, self.name)
+            command = 'qrexec-client-vm %s whonix.NewStatus+""' % (gateway)
             call(command, shell=True)
         except:
             pass
