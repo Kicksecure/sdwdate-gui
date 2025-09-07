@@ -1,7 +1,7 @@
 # Sdwdate Monitor #
 
 sdwdate-gui is a systray icon monitor for sdwdate: checks sdwdate's status
-and modify the tray icon accordingly. In addition, it allows the user to
+and modifies the tray icon accordingly. In addition, it allows the user to
 restart sdwdate and view the log.
 
 ## How to install `sdwdate-gui` using apt-get ##
