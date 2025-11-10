@@ -112,3 +112,9 @@ def parse_config_files() -> None:
                         if not isinstance(conf_dict[schema_key], str):
                             raise ValueError(f"{schema_key}_not_str")
                 ConfigData.conf_dict[schema_key] = conf_dict[schema_key]
+
+## Debugging.
+if __name__ == "__main__":
+    parse_config_files()
+    for k, v in ConfigData.conf_dict.items():
+        print(f"  {k}: {v}")
