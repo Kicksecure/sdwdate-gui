@@ -1,3 +1,58 @@
+commit e9cf009205bef841c2aa0ea1b71e7647c87bc804
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 10 02:46:38 2025 -0500
+
+    lintian
+
+commit 7c9448482b9c8c52fdaf20aa2c344354abc399d0
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 10 02:45:55 2025 -0500
+
+    chmod +x
+
+commit 327f7fdf349552f4f1e88664bc0d14ea1d4b0ab5
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 10 02:43:59 2025 -0500
+
+    debugging
+
+commit 9f761662592400e966ff27536a3694a84877a24d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 10 02:38:06 2025 -0500
+
+    comment
+
+commit 7ea935a3f68d8d6cc5ba473f2f64c9670a9e62a6
+Merge: 067c210 005b67a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 10 01:58:50 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 005b67ada30f6c4e3bba59315c01dd60493e67ae
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sun Nov 9 14:20:44 2025 -0600
+
+    Better exception handling for config file parse failure, refactor main loop in sdwdate_gui_client to keep pylint happy
+
+commit 79fe0d17ffc83d788ba3ac20437968c9ea6aa7e1
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sun Nov 9 14:06:48 2025 -0600
+
+    'disabled-running' -> 'disabled_running' (issue found by ChatGPT Codex)
+
+commit c74255d820108f95256ab1ff76c7c13686d7919d
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sun Nov 9 14:02:14 2025 -0600
+
+    Refactor config file parsing, socket data parsing (with integrated bugfix from ChatGPT Codex)
+
+commit 067c2101c1917f43b4677984ab7f6ccff99058e1
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 9 13:00:29 2025 +0000
+
+    bumped changelog version
+
 commit 421913fd01efc9058ffc676da38a7fe7c5fa3357
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sun Nov 9 08:00:05 2025 -0500
