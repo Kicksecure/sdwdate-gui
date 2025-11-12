@@ -1,3 +1,28 @@
+commit 4a61dd421cf2f42d094168a60b2ca152d2ae20ea
+Merge: 4b29a2f 55e0014
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Nov 11 23:57:18 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 55e001450c4f62d060ea41a05b95b774cfd147aa
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Nov 11 19:02:20 2025 -0600
+
+    Move sdwdate-gui config migration code to sdwdate-gui postinst
+
+commit d52063b1a305c342f47114cb8148eb2987b7cceb
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Mon Nov 10 20:35:59 2025 -0600
+
+    Improve handling of invalid data (from ChatGPT Codex suggestions)
+
+commit 4b29a2f7a7bf523bf9f6236c5b04e063b2d029cf
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 10 07:59:40 2025 +0000
+
+    bumped changelog version
+
 commit e9cf009205bef841c2aa0ea1b71e7647c87bc804
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Mon Nov 10 02:46:38 2025 -0500
