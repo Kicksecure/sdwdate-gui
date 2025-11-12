@@ -15,6 +15,31 @@ true "
 #####################################################################
 "
 
+sdwdate_gui_configuration_update() {
+   if [ -f "/var/lib/whonix/do_once/${FUNCNAME}_version_1" ]; then
+      return 0
+   fi
+
+   local dirs_list dir_item file_item
+
+   dirs_list=(
+      /usr/local/etc/sdwdate-gui.d
+      /etc/sdwdate-gui.d
+   )
+
+   for dir_item in "${dirs_list[@]}"; do
+      [[ -d "$dir_item" ]] || continue
+      for file_item in "$dir_item"/*.conf; do
+         [[ -f "$file_item" ]] || continue
+         ## Add quotes around gateway value if not already quoted.
+         sed -i 's/^gateway=\([^"].*\)$/gateway="\1"/' "$file_item" || true
+      done
+   done
+
+   mkdir --parents "/var/lib/whonix/do_once"
+   touch "/var/lib/whonix/do_once/${FUNCNAME}_version_1"
+}
+
 case "$1" in
     configure)
        ## '/usr/libexec/sdwdate-gui/log-viewer' requires a home folder so we create /run/sdwdate-gui.
@@ -42,6 +67,8 @@ case "$1" in
          deb-systemd-helper enable sdwdate-gui-qubes@.socket
          deb-systemd-helper enable sdwdate-gui-qubes-proxy-helper.service
        fi
+
+       sdwdate_gui_configuration_update
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

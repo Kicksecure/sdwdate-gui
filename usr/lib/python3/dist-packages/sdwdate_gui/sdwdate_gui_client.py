@@ -167,6 +167,7 @@ async def kick_server() -> None:
     await GlobalData.sock_write.wait_closed()
 
 
+# pylint: disable=too-many-return-statements
 async def try_parse_commands() -> None:
     """
     Tries to run any commands in the buffer.
@@ -213,6 +214,9 @@ async def try_parse_commands() -> None:
                     await kick_server()
                     return
                 suppress_client_reconnect()
+            case _:
+                await kick_server()
+                return
 
 
 async def handle_incoming_data() -> bool:
@@ -350,8 +354,27 @@ async def sdwdate_status_changed() -> None:
         logging.error("Unexpected error", exc_info=e)
         return
 
+    for check_key in ("icon", "message"):
+        if check_key not in status_dict:
+            logging.warning(
+                "Missing key '%s' in sdwdate status file!",
+                check_key,
+            )
+            return
+        if not isinstance(status_dict[check_key], str):
+            logging.warning(
+                "Key '%s' in sdwdate status file is not a string!",
+                check_key,
+            )
+            return
+
     status_str: str = status_dict["icon"]
     message_str: str = status_dict["message"]
+
+    if not isinstance(status_str, str) or not isinstance(message_str, str):
+        logging.warning("Invalid data found in sdwdate status file!")
+        return
+
     if status_str in ("success", "busy", "error"):
         await set_sdwdate_status(status_str, message_str)
     else:
