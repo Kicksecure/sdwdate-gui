@@ -58,6 +58,9 @@ def parse_ipc_command(
     """
 
     msg_len: int = int.from_bytes(sock_buf[:2], byteorder="big", signed=False)
+    ## Messages should never be even close to 4 KiB in length.
+    if msg_len > 4096:
+        raise ValueError("Message length too long")
     if len(sock_buf) < (msg_len + 2):
         return sock_buf, None, None
     sock_buf = sock_buf[2:]
