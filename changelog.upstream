@@ -1,3 +1,28 @@
+commit ce1ab8b6b0e5b1059ec90274e044c9ea06e3da15
+Merge: aa00fdf 402d6e5
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Nov 21 04:03:46 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 402d6e5780c4660b2ace55bf2c7dc538c67473f2
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Thu Nov 20 22:58:38 2025 -0600
+
+    Prevent sdwdate-gui-qubes-proxy-helper from possibly delaying boot
+
+commit 636160bd3fbae1cc3e06335d6262b6628b4ca2ea
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Thu Nov 20 20:02:22 2025 -0600
+
+    Fix menu flashing, fix CPU usage issue and prevent massive notification floods when qrexec fails, harden
+
+commit aa00fdf808b29f9ac461ae57dbdd9624cb2c317f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 06:12:40 2025 +0000
+
+    bumped changelog version
+
 commit 4a61dd421cf2f42d094168a60b2ca152d2ae20ea
 Merge: 4b29a2f 55e0014
 Author: Patrick Schleizer <adrelanos@whonix.org>
