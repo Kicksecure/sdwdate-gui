@@ -19,9 +19,6 @@ else
   while (( socket_check_counter < 20 )); do
     sleep 1
     (( socket_check_counter += 1 )) || true
-    ## XXX: Hardcoded. uid 1000 is hardcoded.
-    ## BUG: When sys-whonix is booted in sysmaint session, uid is not 1000.
-    ##      It is 1001 but that may not be guaranteed.
     true "INFO: $0: Check if '$server_sock_path' socket file already exists..."
     if [ -S "$server_sock_path" ]; then
       true "INFO: $0: socket file '$server_sock_path' exists: yes"

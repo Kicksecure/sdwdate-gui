@@ -51,6 +51,7 @@ class GlobalData:
     tor_path: str = "/run/tor"
     torrc_path: str = "/usr/local/etc/torrc.d"
     tor_running_path: str = "/run/tor/tor.pid"
+    last_tor_status: str = ""
     watch_manager: pyinotify.WatchManager | None = None
     notifier: pyinotify.AsyncioNotifier | None = None
     awaitable_tasks: deque[asyncio.Task[Any]] = deque()
@@ -177,9 +178,16 @@ async def try_parse_commands() -> None:
         function_name: str | None
         msg_parts: list[str] | None
         try:
+            preproc_sock_buf_len: int = len(GlobalData.sock_buf)
             GlobalData.sock_buf, function_name, msg_parts = parse_ipc_command(
                 GlobalData.sock_buf
             )
+            postproc_sock_buf_len: int = len(GlobalData.sock_buf)
+            if preproc_sock_buf_len == postproc_sock_buf_len:
+                ## If the buffer didn't shrink, that means that we've only
+                ## received part of a message. Break so that we can receive
+                ## the rest of it later on.
+                break
             if function_name is None:
                 continue
             assert function_name is not None
@@ -329,10 +337,13 @@ async def set_sdwdate_status(status: str, msg: str) -> None:
 async def set_tor_status(status: str) -> None:
     """
     RPC call from client to server. Updates the sdwdate status shown by
-    the server.
+    the server. This call avoids sending duplicate status change messages.
     """
-
-    await generic_rpc_call(b"set_tor_status " + status.encode(encoding="ascii"))
+    if status != GlobalData.last_tor_status:
+        GlobalData.last_tor_status = status
+        await generic_rpc_call(
+            b"set_tor_status " + status.encode(encoding="ascii")
+        )
 
 
 ## WATCHER EVENTS
@@ -585,9 +596,9 @@ async def main_loop() -> None:
                 break
 
         if (
-                not running_in_qubes_os()
-                or not GlobalData.do_reconnect
-                or GlobalData.server_pid_path.is_file()
+            not running_in_qubes_os()
+            or not GlobalData.do_reconnect
+            or GlobalData.server_pid_path.is_file()
         ):
             sys.exit(0)
         await asyncio.sleep(1)
