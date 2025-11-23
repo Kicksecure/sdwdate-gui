@@ -558,6 +558,13 @@ async def do_setup() -> bool:
         if GlobalData.watch_manager is None:
             await setup_inotify_watches(found_tor_paths, found_sdwdate_path)
 
+        ## Clear the last set tor status here so that we will send a repeated
+        ## tor status message in the event of a server restart. Not doing this
+        ## will result in the server thinking that the client's tor status is
+        ## UNKNOWN after a restart, resulting in Tor-related buttons being
+        ## improperly displayed.
+        GlobalData.last_tor_status = ""
+
     except Exception:
         logging.error("sdwdate-gui server disconnected very quickly!")
         return False
