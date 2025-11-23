@@ -28,7 +28,11 @@ while (( connect_check_counter < 10 )); do
 done
 
 if [ "${connect_check_rslt}" != 'y' ]; then
-  exit 1
+  ## Not exiting 1 here, since this service is expected to fail if the
+  ## sdwdate-gui-server VM is not running. The client will continue retrying
+  ## until the sdwdate-gui-server VM is started regardless of the exit code
+  ## here.
+  exit 0
 fi
 
 exec qrexec-client-vm "${target_vm}" sdwdate-gui.Connect
