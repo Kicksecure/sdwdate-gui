@@ -1,3 +1,28 @@
+commit d3833e0339ca316facc1a8993ad07d5a8f94a854
+Merge: 8bfb420 4a0331d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 23 04:07:56 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 4a0331d33a744a52290cf392c0cba1de75dfe70a
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sat Nov 22 23:15:38 2025 -0600
+
+    Send a repeated tor status message if the server restarts
+
+commit cd8789df35b4c031aa7fb73328f9cb8767d867e1
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sat Nov 22 22:59:32 2025 -0600
+
+    Don't make the sdwdate-gui-qubes service fail if the sdwdate-gui-server VM isn't running
+
+commit 8bfb42068c3f5dc8f91bff7a96261d3a464af670
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Nov 21 09:20:11 2025 +0000
+
+    bumped changelog version
+
 commit ce1ab8b6b0e5b1059ec90274e044c9ea06e3da15
 Merge: aa00fdf 402d6e5
 Author: Patrick Schleizer <adrelanos@whonix.org>
