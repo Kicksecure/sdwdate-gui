@@ -8,6 +8,8 @@ set -o nounset
 set -o errtrace
 set -o pipefail
 
+source /usr/libexec/helper-scripts/systemd-notify.bsh
+
 target_vm="$(/usr/libexec/sdwdate-gui/sdwdate-gui-config-read 'gateway')" || exit 1
 
 connect_check_counter=0
@@ -34,5 +36,7 @@ if [ "${connect_check_rslt}" != 'y' ]; then
   ## here.
   exit 0
 fi
+
+"${systemd_notify[@]}" --ready
 
 exec qrexec-client-vm "${target_vm}" sdwdate-gui.Connect
