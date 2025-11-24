@@ -1,3 +1,22 @@
+commit eac0bf7a0cae31d705eb6688028498e4bcb1ca99
+Merge: a2cb500 211e99c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 24 03:08:12 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 211e99c7d4ba32a63c35bdf77567beccbd8b867b
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Sun Nov 23 10:23:57 2025 -0600
+
+    Tell systemd when sdwdate-gui-qubes@.service is initialized and running
+
+commit a2cb5007b2ffd4473e70b1c5350cb7639f91764f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Nov 23 09:11:57 2025 +0000
+
+    bumped changelog version
+
 commit d3833e0339ca316facc1a8993ad07d5a8f94a854
 Merge: 8bfb420 4a0331d
 Author: Patrick Schleizer <adrelanos@whonix.org>
