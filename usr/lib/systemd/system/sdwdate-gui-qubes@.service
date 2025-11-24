@@ -5,7 +5,7 @@ ConditionPathExists=/usr/share/qubes/marker-vm
 ConditionPathExists=!/run/qubes/this-is-templatevm
 
 [Service]
-Type=oneshot
+Type=notify
 RemainAfterExit=false
 ExecStart=/usr/libexec/sdwdate-gui/sdwdate-gui-qubes-proxy
 StandardInput=socket
