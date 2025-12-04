@@ -3,12 +3,24 @@
 ## Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
+#set -x
 set -o errexit
 set -o nounset
 set -o errtrace
 set -o pipefail
 
+true "$0: START"
+
 source /usr/libexec/helper-scripts/systemd-notify.bsh
+
+exit_handler() {
+  ## Avoid error.
+  ## > Dec 04 08:59:57 sys-net systemd[1]: sdwdate-gui-qubes@0-1443-1000.service: Failed with result 'protocol'.
+  "${systemd_notify[@]}" --ready
+  true "$0: END: OK."
+}
+
+trap exit_handler EXIT
 
 target_vm="$(/usr/libexec/sdwdate-gui/sdwdate-gui-config-read 'gateway')" || exit 1
 
