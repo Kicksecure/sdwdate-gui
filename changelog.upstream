@@ -1,3 +1,15 @@
+commit fa456b26e8363ab067d652c05408d9a2e7bd816e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 09:18:40 2025 -0500
+
+    fix cosmetic issue in Qubes sys-net journal: `sdwdate-gui-qubes@0-1443-1000.service: Failed with result 'protocol'.`
+
+commit 293478c99e9a7dfefec2cb38331a6c35d0c51f53
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Nov 24 08:43:44 2025 +0000
+
+    bumped changelog version
+
 commit eac0bf7a0cae31d705eb6688028498e4bcb1ca99
 Merge: a2cb500 211e99c
 Author: Patrick Schleizer <adrelanos@whonix.org>
