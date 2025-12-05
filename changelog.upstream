@@ -1,3 +1,22 @@
+commit 254c724007b9cf394cdbcdb9f664957a51d8a0a4
+Merge: f432153 fa5c1d7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 5 06:33:32 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit fa5c1d7855345f63443975e4850454d6f9ce1ee3
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Fri Dec 5 00:08:52 2025 -0600
+
+    Make sdwdate-gui-qubes-proxy much less likely to fail, to avoid systemd showing the system as degraded incorrectly
+
+commit f4321530429527774f1ea340c53e9659fa61fedf
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 14:22:26 2025 +0000
+
+    bumped changelog version
+
 commit fa456b26e8363ab067d652c05408d9a2e7bd816e
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Dec 4 09:18:40 2025 -0500
