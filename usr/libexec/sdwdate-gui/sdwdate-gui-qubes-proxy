@@ -24,11 +24,11 @@ trap exit_handler EXIT
 
 target_vm="$(/usr/libexec/sdwdate-gui/sdwdate-gui-config-read 'gateway')" || exit 1
 
-connect_check_counter=0
+"${systemd_notify[@]}" --ready
+
 connect_check_rslt='n'
-while (( connect_check_counter < 10 )); do
+while true; do
   sleep 1
-  (( connect_check_counter += 1 )) || true
   connect_check_rslt="$(
     ## We redirect a blank string into this qrexec-client-vm invocation's
     ## stdin, because otherwise it will eat the script's stdin up to this
@@ -42,13 +42,7 @@ while (( connect_check_counter < 10 )); do
 done
 
 if [ "${connect_check_rslt}" != 'y' ]; then
-  ## Not exiting 1 here, since this service is expected to fail if the
-  ## sdwdate-gui-server VM is not running. The client will continue retrying
-  ## until the sdwdate-gui-server VM is started regardless of the exit code
-  ## here.
   exit 0
 fi
 
-"${systemd_notify[@]}" --ready
-
-exec qrexec-client-vm "${target_vm}" sdwdate-gui.Connect
+qrexec-client-vm "${target_vm}" sdwdate-gui.Connect || true
