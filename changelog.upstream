@@ -1,3 +1,36 @@
+commit 4c4b5cdca62670cfa5707f73c666c6b1f6c48d71
+Merge: c6b3430 e5de0b2
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 19 03:37:46 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit e5de0b2843db1a0c2dc755a94019c79b1ee72d03
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Thu Dec 18 20:52:23 2025 -0600
+
+    Remove sdwdate-gui-qubes@.socket's explicit dependency on sockets.target
+    
+    systemd.socket(5) documents:
+    
+      Socket units automatically gain a Before= dependency on sockets.target.
+    
+    However, we had 'Requires/After' dependencies on sockets.target.
+    Marek noticed that sockets.target and sdwdate-gui-qubes@1000.socket
+    were ending up in a shutdown ordering cycle that was resulting in the
+    stop job for user@1000.service being deleted during shutdown. This is
+    a possible cause of the shutdown hanging bugs we are seeing in Qubes
+    OS's testing infrastructure.
+    
+    Get rid of the dependency on sockets.target entirely, just rely on the
+    default 'Before' dependency.
+
+commit c6b343096fa843c88e5a649c63688a6bf209f6cf
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 5 11:38:48 2025 +0000
+
+    bumped changelog version
+
 commit 254c724007b9cf394cdbcdb9f664957a51d8a0a4
 Merge: f432153 fa5c1d7
 Author: Patrick Schleizer <adrelanos@whonix.org>
