@@ -6,11 +6,9 @@ ConditionPathExists=/run/sdwdate-gui-qubes-should-proxy
 ConditionPathExists=!/run/qubes/this-is-templatevm
 
 Requires=user@.service
-Requires=sockets.target
 Requires=sdwdate-gui-qubes-proxy-helper.service
 
 After=user@.service
-After=sockets.target
 After=sdwdate-gui-qubes-proxy-helper.service
 
 [Socket]
