@@ -1,5 +1,6 @@
 [Unit]
 Description=sdwdate graphical user interface - Qubes socket proxy
+DefaultDependencies=no
 
 ConditionPathExists=/usr/share/qubes/marker-vm
 ConditionPathExists=/run/sdwdate-gui-qubes-should-proxy
@@ -10,6 +11,9 @@ Requires=sdwdate-gui-qubes-proxy-helper.service
 
 After=user@.service
 After=sdwdate-gui-qubes-proxy-helper.service
+
+Before=shutdown.target
+Conflicts=shutdown.target
 
 [Socket]
 ListenStream=/run/user/%i/sdwdate-gui/sdwdate-gui-server.socket
