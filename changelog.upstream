@@ -1,3 +1,22 @@
+commit 8df6eea9c90bf17f079b1c7ca5405349c64857e6
+Merge: 9abf380 4676cd2
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Dec 22 22:06:11 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 4676cd2ed60eb90d7e39a8bb5d30009b20cad392
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Mon Dec 22 09:43:05 2025 -0600
+
+    Try to break the sdwdate-gui-qubes shutdown ordering cycle again
+
+commit 9abf380e5b7e5add4074a180338ffd8c0c802122
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 19 09:52:51 2025 +0000
+
+    bumped changelog version
+
 commit 4c4b5cdca62670cfa5707f73c666c6b1f6c48d71
 Merge: c6b3430 e5de0b2
 Author: Patrick Schleizer <adrelanos@whonix.org>
