@@ -27,7 +27,10 @@ def main() -> NoReturn:
     if len(sys.argv) != 2:
         sys.exit(2)
 
-    if not sys.argv[1] in ConfigData.conf_schema:
+    ## Minor abuse of defaults_dict, but it conveniently enumerates all
+    ## possible config options, and will continue to do so most likely, so
+    ## this should be fine.
+    if not sys.argv[1] in ConfigData.defaults_dict:
         print(
             f"ERROR: Unrecognized configuration option '{sys.argv[1]}'!",
             file=sys.stderr,

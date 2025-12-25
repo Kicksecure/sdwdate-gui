@@ -15,7 +15,8 @@ Rules-Requires-Root: no
 Package: sdwdate-gui
 Architecture: all
 Depends: privleap, python3, python3-pyqt5, python3-pyinotify,
- qtwayland5, helper-scripts, sdwdate, adduser, ${misc:Depends}
+ qtwayland5, helper-scripts, sdwdate, adduser, python3-schema,
+ ${misc:Depends}
 Description: Sdwdate Monitor
  sdwdate-gui is a systray icon monitor for sdwdate: checks sdwdate's status
  and modify the tray icon accordingly. In addition, it allows the user to

@@ -3,7 +3,7 @@
 ## Copyright (C) 2015 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
-# pylint: disable=no-name-in-module,broad-exception-caught,too-many-lines
+# pylint: disable=no-name-in-module,broad-exception-caught,too-many-lines,duplicate-code
 
 """
 The server component of sdwdate-gui. Presents a graphical interface for
@@ -1158,10 +1158,7 @@ def main() -> NoReturn:
     try:
         parse_config_files()
     except Exception as e:
-        logging.error(
-            "Configuration file parsing failed!",
-            exc_info=e
-        )
+        logging.error("Configuration file parsing failed!", exc_info=e)
         sys.exit(1)
     assert isinstance(ConfigData.conf_dict["disable"], bool)
     assert isinstance(ConfigData.conf_dict["run_server_in_qubes"], bool)

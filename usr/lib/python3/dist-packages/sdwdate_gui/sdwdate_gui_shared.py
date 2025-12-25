@@ -9,10 +9,10 @@
 Code shared between sdwdate_gui_client and sdwdate_gui_server.
 """
 
-from pathlib import Path
 from typing import Any
+import schema  # type: ignore
 
-import tomllib
+from strict_config_parser import strict_config_parser
 
 
 # pylint: disable=too-few-public-methods
@@ -25,16 +25,19 @@ class ConfigData:
         "/etc/sdwdate-gui.d",
         "/usr/local/etc/sdwdate-gui.d",
     ]
-    conf_schema: dict[str, str] = {
-        "disable": "bool",
-        "run_server_in_qubes": "bool",
-        "gateway": "str",
-    }
-    conf_dict: dict[str, Any] = {
+    conf_schema: schema.Schema = schema.Schema(
+        {
+            schema.Optional("disable"): bool,
+            schema.Optional("run_server_in_qubes"): bool,
+            schema.Optional("gateway"): str,
+        },
+    )
+    defaults_dict: dict[str, Any] = {
         "disable": False,
         "run_server_in_qubes": False,
         "gateway": "sys-whonix",
     }
+    conf_dict: dict[str, Any] = {}
 
 
 def check_bytes_printable(buf: bytes) -> bool:
@@ -85,36 +88,12 @@ def parse_config_files() -> None:
     reflect the correct configuration state.
     """
 
-    config_file_list: list[Path] = []
+    ConfigData.conf_dict = strict_config_parser.parse_config_files(
+        conf_item_list=ConfigData.conf_dir_list,
+        conf_schema=ConfigData.conf_schema,
+        defaults_dict=ConfigData.defaults_dict,
+    )
 
-    for dir_item in ConfigData.conf_dir_list:
-        config_file_sub_list: list[Path] = []
-        dir_path = Path(dir_item)
-        if not dir_path.is_dir():
-            continue
-        for config_file in dir_path.iterdir():
-            if not config_file.is_file():
-                continue
-            if not config_file.name.endswith(".conf"):
-                continue
-            config_file_sub_list.append(config_file)
-        config_file_sub_list.sort()
-        config_file_list.extend(config_file_sub_list)
-
-    for config_file in config_file_list:
-        with open(config_file, "rb") as f:
-            conf_dict: dict[str, Any] = tomllib.load(f)
-            for schema_key, schema_val in ConfigData.conf_schema.items():
-                if schema_key not in conf_dict:
-                    continue
-                match schema_val:
-                    case "bool":
-                        if not isinstance(conf_dict[schema_key], bool):
-                            raise ValueError(f"{schema_key}_not_bool")
-                    case "str":
-                        if not isinstance(conf_dict[schema_key], str):
-                            raise ValueError(f"{schema_key}_not_str")
-                ConfigData.conf_dict[schema_key] = conf_dict[schema_key]
 
 ## Debugging.
 if __name__ == "__main__":
