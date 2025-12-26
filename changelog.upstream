@@ -1,3 +1,22 @@
+commit a7b13a9434552efbe7ffcd73c3ccdf2798c5e273
+Merge: 150dd3d ec441ff
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 26 13:58:38 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit ec441ffa011394fba3fe7dbea3f035f492fd7b5a
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Wed Dec 24 19:49:30 2025 -0600
+
+    Use strict_config_parser library instead of built-in config parsing routine
+
+commit 150dd3d60195252f26b608e1ed9a01acef0ab938
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Dec 23 03:08:49 2025 +0000
+
+    bumped changelog version
+
 commit 8df6eea9c90bf17f079b1c7ca5405349c64857e6
 Merge: 9abf380 4676cd2
 Author: Patrick Schleizer <adrelanos@whonix.org>
