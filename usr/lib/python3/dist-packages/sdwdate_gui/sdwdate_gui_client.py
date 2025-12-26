@@ -3,7 +3,7 @@
 ## Copyright (C) 2015 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
-# pylint: disable=broad-exception-caught,import-error
+# pylint: disable=broad-exception-caught,import-error,duplicate-code
 
 """
 The client component of sdwdate-gui. Monitors sdwdate and Tor states, reports
@@ -632,10 +632,7 @@ async def main() -> NoReturn:
     try:
         parse_config_files()
     except Exception as e:
-        logging.error(
-            "Configuration file parsing failed!",
-            exc_info=e
-        )
+        logging.error("Configuration file parsing failed!", exc_info=e)
         sys.exit(1)
     assert isinstance(ConfigData.conf_dict["disable"], bool)
     if ConfigData.conf_dict["disable"]:
