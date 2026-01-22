@@ -3,6 +3,20 @@
 ## Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
+## This script runs on the workstation and is systemd socket-activated.
+## systemd will create a socket at
+## /run/user/UID/sdwdate-gui/sdwdate-gui-server.socket. When that socket is
+## connected to, this script will run, and its stdio streams will be connected
+## to the socket.
+##
+## The script repeatedly calls sdwdate-gui.ConnectCheck once a second to see
+## if it is possible to call sdwdate-gui.Connect yet. If it receives a 'y', it
+## calls sdwdate-gui.Connect, which will pass all socket I/O from the systemd
+## socket to the gateway sdwdate-gui-server instance. If it receives an 'n',
+## it waits a second and then checks for the server again. If it receives
+## anything other than a 'y' or 'n' (such as the special value 'q' for
+## "quit"), it gives up entirely.
+
 #set -x
 set -o errexit
 set -o nounset
@@ -42,6 +56,13 @@ while true; do
 done
 
 if [ "${connect_check_rslt}" != 'y' ]; then
+  ## Drop a flag file to let sdwdate-gui-client know that the server will
+  ## never be available and it should stop waiting.
+  if mkdir --parents -- '/run/sdwdate-gui'; then
+    touch '/run/sdwdate-gui/qubes-gateway-server-disabled' || true
+  fi
+  ## Don't error out here, it is possible that sdwdate-gui has been disabled
+  ## on the server end.
   exit 0
 fi
 

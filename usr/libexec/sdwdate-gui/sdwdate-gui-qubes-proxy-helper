@@ -3,19 +3,38 @@
 ## Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
+## This script runs on both the gateway and workstation.
+##
+## On the gateway, it waits for up to 20 seconds for sdwdate-gui-server to
+## start for the default user, and symlinks its socket to the
+## sdwdate-gui.Connect qrexec endpoint so that the workstation can communicate
+## with it.
+##
+## On the workstation, it drops a flag file that makes systemd enable the
+## sdwdate-gui-qubes@.socket units, enabling sdwdate-gui-client to communicate
+## with the server on the gateway..
+
 #set -x
 set -e
 
 socket_check_counter=0
 
-server_enabled="$(/usr/libexec/sdwdate-gui/sdwdate-gui-config-read 'run_server_in_qubes')" || exit 1
+qubes_server_permitted="$(/usr/libexec/sdwdate-gui/sdwdate-gui-config-read 'run_server_in_qubes')" || exit 1
 default_user="$(qubesdb-read /default-user)" || exit 1
 default_user_uid="$(id -u "$default_user")" || exit 1
 server_sock_path="/run/user/$default_user_uid/sdwdate-gui/sdwdate-gui-server.socket"
 
-if [ "$server_enabled" != 'True' ]; then
+if [ "$qubes_server_permitted" != 'True' ]; then
+  true "INFO: $0: Running on Qubes, but not supposed to run server in this VM. Enabling server proxy and exiting, ok."
   touch /run/sdwdate-gui-qubes-should-proxy
+  exit 0
 else
+  server_disabled="$(/usr/libexec/sdwdate-gui/sdwdate-gui-config-read 'disable')" || exit 1
+  if [ "$server_disabled" = 'True' ]; then
+    true "INFO: $0: Running on Qubes, but server disabled. Exiting, ok."
+    exit 0;
+  fi
+  true "INFO: $0: Running on Qubes, and server enabled."
   while (( socket_check_counter < 20 )); do
     sleep 1
     (( socket_check_counter += 1 )) || true
