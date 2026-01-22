@@ -1,3 +1,22 @@
+commit e5d28f188bc7728529d3d21dfa9e0f33c5d449f0
+Merge: 43016ec e3f5c3c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jan 22 04:33:22 2026 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit e3f5c3cbb2a0c52b5220f81e26a5a66e7324db35
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Wed Jan 21 22:13:41 2026 -0600
+
+    Fix log spam when sdwdate-gui is disabled on the gateway but not the workstation, add beter documentation and optimize things a bit
+
+commit 43016ec5f960375fb986340b33dedee8de1b07cb
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 26 19:03:30 2025 +0000
+
+    bumped changelog version
+
 commit a7b13a9434552efbe7ffcd73c3ccdf2798c5e273
 Merge: 150dd3d ec441ff
 Author: Patrick Schleizer <adrelanos@whonix.org>
