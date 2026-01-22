@@ -45,6 +45,9 @@ class GlobalData:
         "sdwdate-gui-server.socket",
     )
     server_pid_path: Path = sdwdate_run_dir.joinpath("server_pid")
+    qubes_gateway_server_disabled_path: Path = Path(
+        "/run/sdwdate-gui/qubes-gateway-server-disabled"
+    )
     do_reconnect: bool = True
     sock_buf: bytes = b""
     sdwdate_status_path: str = "/run/sdwdate/status"
@@ -578,6 +581,10 @@ async def main_loop() -> None:
     """
 
     while True:
+        if GlobalData.qubes_gateway_server_disabled_path.is_file():
+            ## We're running under Qubes, and the gateway has 'disable=true'
+            ## set in its configuration. Give up.
+            break
         if not await do_setup():
             continue
         while True:

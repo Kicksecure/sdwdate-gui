@@ -3,9 +3,40 @@
 ## Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
 ## See the file COPYING for copying conditions.
 
+## This script runs on the gateway. It detects if the qrexec socket that
+## allows a client VM to connect to the server is present or not. It outputs
+## one of the following values:
+##
+## * 'y' - Yes, sdwdate-gui.Connect qrexec endpoint is ready to use.
+## * 'n' - No, sdwdate-gui.Connect qrexec endpoint is not ready to use but is
+##         intended to become available later.
+## * 'q' - No, sdwdate-gui.Connect qrexec endpoint is not ready to use and
+##         will not become available later, therefore the caller should exit.
+
 ## See if the socket for sdwdate-gui-server exists or not.
 if [ -S '/run/qubes-rpc/sdwdate-gui.Connect' ]; then
+  ## Endpoint is ready.
   printf '%s\n' 'y'
 else
-  printf '%s\n' 'n'
+  if ! mkdir --parents -- '/run/sdwdate-gui'; then
+    ## If we can't create /run/sdwdate-gui, something is very wrong, and the
+    ## caller should give up.
+    printf '%s\n' 'q'
+    exit 0
+  fi
+  if [ -f '/run/sdwdate-gui/proxy-should-run' ]; then
+    ## If we've already cached the fact that the server is enabled, tell the
+    ## caller to keep waiting.
+    printf '%s\n' 'n'
+    exit 0
+  fi
+  if [ "$(/usr/libexec/sdwdate-gui/sdwdate-gui-config-read 'disable')" = 'false' ]; then
+    ## If the server is enabled, tell the caller to keep waiting and cache this
+    ## fact so we don't have to re-parse the configuration file over and over.
+    touch '/run/sdwdate-gui/proxy-should-run'
+    printf '%s\n' 'n'
+    exit 0
+  fi
+  ## Server is disabled, tell the caller to give up.
+  printf '%s\n' 'q'
 fi
