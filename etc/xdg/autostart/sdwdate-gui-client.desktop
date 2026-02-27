@@ -6,5 +6,5 @@ Name=sdwdate-gui-client
 Comment=Secure Distributed Web Date Graphical User Interface
 Type=Application
 Terminal=false
-Exec=/usr/bin/sdwdate-gui-client
+Exec=systemctl --user start sdwdate-gui.service
 #NotShowIn=QUBES;

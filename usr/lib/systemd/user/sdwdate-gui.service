@@ -1,0 +1,10 @@
+## Copyright (C) 2026 - 2026 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
+
+[Unit]
+Description=Secure Distributed Web Date Graphical User Interface
+
+[Service]
+Type=oneshot
+ExecCondition=/usr/libexec/helper-scripts/has_netvm_on_qubes
+ExecStart=/usr/bin/sdwdate-gui
