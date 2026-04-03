@@ -761,12 +761,14 @@ to connect to or configure the Tor network."""
                 client_icon = QIcon(
                     self.tor_icon_list[client.tor_status.value],
                 )
-            elif client.sdwdate_status != SdwdateStatus.UNKNOWN:
-                client_icon = QIcon(
-                    self.sdwdate_icon_list[client.sdwdate_status.value],
-                )
             else:
-                continue
+                if client.sdwdate_status == SdwdateStatus.UNKNOWN:
+                    effective_status = SdwdateStatus.BUSY
+                else:
+                    effective_status = client.sdwdate_status
+                client_icon = QIcon(
+                    self.sdwdate_icon_list[effective_status.value],
+                )
 
             ## Each client gets its own submenu, unless there's only one
             ## client.
