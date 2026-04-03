@@ -8,3 +8,4 @@ Description=Secure Distributed Web Date Graphical User Interface
 Type=oneshot
 ExecCondition=/usr/libexec/helper-scripts/has_netvm_on_qubes
 ExecStart=/usr/bin/sdwdate-gui
+RemainAfterExit=true
