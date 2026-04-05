@@ -32,9 +32,7 @@ from PyQt5.QtCore import (
 )
 from PyQt5.QtGui import (
     QIcon,
-    QImage,
     QCursor,
-    QPixmap,
 )
 from PyQt5.QtWidgets import (
     QMenu,
@@ -157,29 +155,12 @@ class SdwdateGuiClient(QObject):
         self.sdwdate_msg: str | None = None
         self.tor_status: TorStatus = TorStatus.UNKNOWN
         self.qubes_header_parsed: bool = False
-        self.ref_count: int = 1
+        self.present_in_menu: bool = False
 
         self.__sock_buf: bytes = b""
 
         self.client_socket.readyRead.connect(self.__handle_incoming_data)
         self.client_socket.disconnected.connect(self.clientDisconnected.emit)
-
-    def ref(self) -> None:
-        """
-        Increments the internal reference count.
-        """
-
-        self.ref_count += 1
-
-    def unref(self) -> None:
-        """
-        Decrements the internal reference count and calls deleteLater() if the
-        count has dropped to 0.
-        """
-
-        self.ref_count -= 1
-        if self.ref_count == 0:
-            self.deleteLater()
 
     def client_name_or_unknown(self) -> str:
         """
@@ -584,7 +565,7 @@ class SdwdateGuiFrame(QDialog):
     def __init__(
         self,
         text: str,
-        icon_path: str,
+        icon: QIcon,
         parent: QWidget | None = None,
     ) -> None:
         """
@@ -597,12 +578,11 @@ class SdwdateGuiFrame(QDialog):
         self.setWindowTitle("Time Synchronization Monitor")
         self.setMinimumWidth(200)
 
-        icon_widget = QLabel(self)
-        image = QImage(icon_path)
+        icon_widget: QLabel = QLabel(self)
         icon_widget.setAlignment(Qt.AlignRight)
-        icon_widget.setPixmap(QPixmap.fromImage(image))
+        icon_widget.setPixmap(icon.pixmap(64, 64))
 
-        text_widget = QLabel(self)
+        text_widget: QLabel = QLabel(self)
         text_widget.setTextInteractionFlags(
             Qt.LinksAccessibleByMouse | Qt.TextSelectableByMouse
         )
@@ -610,11 +590,11 @@ class SdwdateGuiFrame(QDialog):
         text_widget.setAlignment(Qt.AlignTop)
         text_widget.setText(text)
 
-        close_button = QPushButton("Close", self)
+        close_button: QPushButton = QPushButton("Close", self)
         close_button.setMaximumWidth(50)
         close_button.clicked.connect(self.quiet_close)
 
-        frame_content = QGridLayout(self)
+        frame_content: QGridLayout = QGridLayout(self)
         frame_content.addWidget(icon_widget, 0, 0, 1, 1)
         frame_content.addWidget(text_widget, 0, 1, 1, 2)
         frame_content.addWidget(close_button, 1, 1, 1, 2)
@@ -653,22 +633,41 @@ class SdwdateTrayIcon(QSystemTrayIcon):
         self.msg_window_type: MessageType | None = None
 
         self.icon_path: str = "/usr/share/sdwdate-gui/icons/"
-        self.tor_icon_list: list[str] = [
-            self.icon_path + "tor-ok.png",
-            self.icon_path + "error.png",
-            self.icon_path + "error.png",
-            self.icon_path + "tor-warning.png",
+        self.error_icon: QIcon = QIcon(
+            self.icon_path + "error.png"
+        )
+        self.tor_icon_list: list[QIcon] = [
+            QIcon(self.icon_path + "tor-ok.png"),
+            self.error_icon,
+            self.error_icon,
+            QIcon(self.icon_path + "tor-warning.png"),
         ]
-        self.sdwdate_icon_list: list[str] = [
-            self.icon_path + "sdwdate-success.png",
-            self.icon_path + "sdwdate-wait.png",
-            self.icon_path + "sdwdate-stopped.png",
+        self.sdwdate_icon_list: list[QIcon] = [
+            QIcon(self.icon_path + "sdwdate-success.png"),
+            QIcon(self.icon_path + "sdwdate-wait.png"),
+            QIcon(self.icon_path + "sdwdate-stopped.png"),
         ]
-        self.setIcon(QIcon(self.sdwdate_icon_list[SdwdateStatus.BUSY.value]))
+        self.advanced_settings_icon: QIcon = QIcon(
+            self.icon_path + "advancedsettings.ico"
+        )
+        self.sdwdate_log_icon: QIcon = QIcon(
+            self.icon_path + "sdwdate-log.png"
+        )
+        self.restart_sdwdate_icon: QIcon = QIcon(
+            self.icon_path + "restart-sdwdate.png"
+        )
+        self.stop_sdwdate_icon: QIcon = QIcon(
+            self.icon_path + "stop-sdwdate.png"
+        )
+        self.application_exit_icon: QIcon = QIcon(
+            self.icon_path + "application-exit.png"
+        )
+        self.setIcon(self.sdwdate_icon_list[SdwdateStatus.BUSY.value])
         self.setToolTip("Time Synchronization Monitor \nRight-click for menu.")
 
         self.menu: QMenu = QMenu()
         self.menu_client_list: list[SdwdateGuiClient] = []
+        self.menu_action_list: list[QAction] = []
         self.menu_regen_pending: bool = False
         self.regen_menu()
         self.menu.aboutToShow.connect(self.handle_menu_show)
@@ -694,7 +693,7 @@ class SdwdateTrayIcon(QSystemTrayIcon):
 
         msg_window: SdwdateGuiFrame = SdwdateGuiFrame(
             f"Client '{client.client_name}' is no longer connected.",
-            self.icon_path + "error.png",
+            self.error_icon,
         )
         if self.msg_window is not None and self.msg_window.isVisible():
             self.msg_window.close()
@@ -817,14 +816,19 @@ to connect to or configure the Tor network."""
 
         if self.menu.isVisible() and not force_regen:
             ## Avoid mutating menu actions while the menu popup is on screen.
-            ## Queue a refresh to run when the popup closes.
+            ## Queue a refresh to run when the popup opens next.
             self.menu_regen_pending = True
             return
 
         self.menu_regen_pending = False
+        for old_action in self.menu_action_list:
+            old_action.deleteLater()
+        self.menu_action_list.clear()
         self.menu.clear()
         for old_client in self.menu_client_list:
-            old_client.unref()
+            old_client.present_in_menu = False
+            if not old_client in self.client_list:
+                old_client.deleteLater()
         self.menu_client_list.clear()
 
         clients_shown: int = 0
@@ -851,13 +855,9 @@ to connect to or configure the Tor network."""
             ## is Tor-enabled or not.
             client_icon: QIcon
             if client.tor_status in (TorStatus.STOPPED, TorStatus.DISABLED):
-                client_icon = QIcon(
-                    self.tor_icon_list[client.tor_status.value],
-                )
+                client_icon = self.tor_icon_list[client.tor_status.value]
             else:
-                client_icon = QIcon(
-                    self.sdwdate_icon_list[effective_sdwdate_status.value],
-                )
+                client_icon = self.sdwdate_icon_list[effective_sdwdate_status.value]
 
             ## Each client gets its own submenu, unless there's only one
             ## client.
@@ -880,7 +880,7 @@ to connect to or configure the Tor network."""
                 else:
                     target_tor_status = client.tor_status
                 action: QAction = QAction(
-                    QIcon(self.tor_icon_list[target_tor_status.value]),
+                    self.tor_icon_list[target_tor_status.value],
                     "Show Tor status",
                     action_menu,
                 )
@@ -890,10 +890,11 @@ to connect to or configure the Tor network."""
                     )
                 )
                 action_menu.addAction(action)
+                self.menu_action_list.append(action)
 
                 ## ACTION: Tor control panel
                 action = QAction(
-                    QIcon(self.icon_path + "advancedsettings.ico"),
+                    self.advanced_settings_icon,
                     "Tor control panel",
                     action_menu,
                 )
@@ -905,11 +906,12 @@ to connect to or configure the Tor network."""
                     )
                 )
                 action_menu.addAction(action)
+                self.menu_action_list.append(action)
                 action_menu.addSeparator()
 
             ## ACTION: Sdwdate status
             action = QAction(
-                QIcon(self.sdwdate_icon_list[effective_sdwdate_status.value]),
+                self.sdwdate_icon_list[effective_sdwdate_status.value],
                 "Show sdwdate status",
                 action_menu,
             )
@@ -921,11 +923,12 @@ to connect to or configure the Tor network."""
                 )
             )
             action_menu.addAction(action)
+            self.menu_action_list.append(action)
             action_menu.addSeparator()
 
             ## ACTION: Show sdwdate log
             action = QAction(
-                QIcon(self.icon_path + "sdwdate-log.png"),
+                self.sdwdate_log_icon,
                 "Open sdwdate's log",
                 action_menu,
             )
@@ -935,10 +938,11 @@ to connect to or configure the Tor network."""
                 )
             )
             action_menu.addAction(action)
+            self.menu_action_list.append(action)
 
             ## ACTION: Sdwdate restart
             action = QAction(
-                QIcon(self.icon_path + "restart-sdwdate.png"),
+                self.restart_sdwdate_icon,
                 "Restart sdwdate",
                 action_menu,
             )
@@ -948,10 +952,11 @@ to connect to or configure the Tor network."""
                 )
             )
             action_menu.addAction(action)
+            self.menu_action_list.append(action)
 
             ## ACTION: Sdwdate stop
             action = QAction(
-                QIcon(self.icon_path + "stop-sdwdate.png"),
+                self.stop_sdwdate_icon,
                 "Stop sdwdate",
                 action_menu,
             )
@@ -961,10 +966,11 @@ to connect to or configure the Tor network."""
                 )
             )
             action_menu.addAction(action)
+            self.menu_action_list.append(action)
 
             ## Prevent the client from being deleted if we still have a menu
             ## entry for it, while still ensuring we free it once safe
-            client.ref()
+            client.present_in_menu = True
             self.menu_client_list.append(client)
 
             clients_shown += 1
@@ -976,17 +982,19 @@ to connect to or configure the Tor network."""
             )
             no_clients_action.setEnabled(False)
             self.menu.addAction(no_clients_action)
+            self.menu_action_list.append(no_clients_action)
         self.menu.addSeparator()
 
         ## Add a button to quit the sdwdate GUI server underneath all the
         ## client entries
         action = QAction(
-            QIcon(self.icon_path + "application-exit.png"),
+            self.application_exit_icon,
             "&Exit",
             self.menu,
         )
         action.triggered.connect(sys.exit)
         self.menu.addAction(action)
+        self.menu_action_list.append(action)
 
     def handle_menu_show(self) -> None:
         """
@@ -1024,9 +1032,9 @@ to connect to or configure the Tor network."""
             TorStatus.STOPPED.value,
             TorStatus.DISABLED.value,
         ):
-            self.setIcon(QIcon(self.tor_icon_list[tor_status_index]))
+            self.setIcon(self.tor_icon_list[tor_status_index])
         elif sdwdate_status_index > -1:
-            self.setIcon(QIcon(self.sdwdate_icon_list[sdwdate_status_index]))
+            self.setIcon(self.sdwdate_icon_list[sdwdate_status_index])
 
         ## Continue without setting a new icon if both of these checks flunk.
 
@@ -1093,7 +1101,8 @@ to connect to or configure the Tor network."""
         Purges a disconnected client from the client list.
         """
 
-        sender_client.unref()
+        if not sender_client.present_in_menu:
+            sender_client.deleteLater()
 
         for idx, client in enumerate(self.client_list):
             if client == sender_client:
