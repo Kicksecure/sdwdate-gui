@@ -698,6 +698,7 @@ class SdwdateTrayIcon(QSystemTrayIcon):
         )
         if self.msg_window is not None and self.msg_window.isVisible():
             self.msg_window.close()
+        if self.msg_window is not None:
             self.msg_window.deleteLater()
 
         self.msg_window = msg_window
@@ -786,6 +787,7 @@ to connect to or configure the Tor network."""
 
         if self.msg_window is not None and self.msg_window.isVisible():
             self.msg_window.close()
+        if self.msg_window is not None:
             self.msg_window.deleteLater()
 
         self.msg_window = msg_window
