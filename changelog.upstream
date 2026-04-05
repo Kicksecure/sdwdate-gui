@@ -1,3 +1,50 @@
+commit ea9ee12e1a7c2b2394ddbc35a2ee0be06d52d687
+Merge: 0e3c83b 15cfd45
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Apr 5 06:17:52 2026 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 15cfd4566d434e7b3b664d0422bca3b689f8fd14
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Sat Apr 4 22:27:31 2026 -0400
+
+    Fix possible memory leak when notification windows open
+
+commit d96e49799d6ebb0be01f0b4239c7c162857a6570
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Fri Apr 3 19:35:39 2026 -0400
+
+    Avoid modifying the sdwdate-gui menu while the user has it open, fix an edge case that could result in clients not being shown when they should be
+    
+    Inspired by a ChatGPT Codex PR, but substantially different from the PR
+    in implementation.
+    
+    Because the chances of a user running an action on a client that is no
+    longer connected are now much higher, this also adds some code to tell
+    the user that a client is no longer connected if this edge case is hit.
+
+commit 0e2249257a10648d52efc5cc330112c02e345ac9
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Fri Apr 3 15:18:18 2026 -0400
+
+    Fix sdwdate-gui.service silent failure
+    
+    It looks like systemd was killing the sdwdate-gui-server and
+    sdwdate-gui-client processes spun up by sdwdate-gui.service because
+    RemainAfterExit=true had not been specified. Adding that seems to have
+    fixed the issue. We also had a vestigal sdwdate-gui-server.desktop file
+    in /etc/xdg/autostart that was causing the server to try to start
+    twice; one of the times was being killed by systemd, the other one
+    wasn't, which is why the tray icon was appearing, but didn't have any
+    clients listed in it.
+
+commit 0e3c83b2766a6facf80f033d7979056aa570711b
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Feb 27 10:54:46 2026 +0000
+
+    bumped changelog version
+
 commit c5dcb66b704a096b3ad09300b130fa7c784b4b64
 Merge: 1fbdfcc 8844c95
 Author: Patrick Schleizer <adrelanos@whonix.org>
