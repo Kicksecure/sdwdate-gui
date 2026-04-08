@@ -1,3 +1,22 @@
+commit b3aa196865fd04d1a23e7d2510998e04e4b67fb4
+Merge: aab8858 6acb9e6
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Apr 8 10:00:35 2026 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 6acb9e66cb3b318ee0ae61488dd44f6bfd07b15f
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Sun Apr 5 12:42:36 2026 -0400
+
+    Fix possible use-after-free when a client is kicked, fix a comment, clean up icon- and action-related memory leaks
+
+commit aab88586d667a80004304141679864d3719ca6aa
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Apr 5 10:29:03 2026 +0000
+
+    bumped changelog version
+
 commit ea9ee12e1a7c2b2394ddbc35a2ee0be06d52d687
 Merge: 0e3c83b 15cfd45
 Author: Patrick Schleizer <adrelanos@whonix.org>
