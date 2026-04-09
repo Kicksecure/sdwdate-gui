@@ -516,27 +516,53 @@ async def setup_inotify_watches(
     Creates the inotify watches.
     """
 
+    ## Only watch for events that are actually handled by INotifyEventHandler.
+    ## Using ALL_EVENTS would waste inotify resources on events like IN_ACCESS,
+    ## IN_OPEN, IN_CLOSE_NOWRITE, etc. that are never processed.
+    watch_mask: int = (
+        pyinotify.IN_MODIFY
+        | pyinotify.IN_CREATE
+        | pyinotify.IN_DELETE
+        | pyinotify.IN_MOVED_FROM
+        | pyinotify.IN_MOVED_TO
+        | pyinotify.IN_DELETE_SELF
+        | pyinotify.IN_MOVE_SELF
+    )
+
     GlobalData.watch_manager = pyinotify.WatchManager()
     loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
     GlobalData.notifier = pyinotify.AsyncioNotifier(
         GlobalData.watch_manager, loop, default_proc_fun=INotifyEventHandler()
     )
     if found_tor_paths:
-        GlobalData.watch_manager.add_watch(
+        ret: dict[str, int] = GlobalData.watch_manager.add_watch(
             GlobalData.tor_path,
-            pyinotify.ALL_EVENTS,
-            rec=True,
+            watch_mask,
         )
-        GlobalData.watch_manager.add_watch(
+        for path, wd in ret.items():
+            if wd < 0:
+                logging.error(
+                    "Failed to add inotify watch for '%s'!", path,
+                )
+        ret = GlobalData.watch_manager.add_watch(
             GlobalData.torrc_path,
-            pyinotify.ALL_EVENTS,
-            rec=True,
+            watch_mask,
         )
+        for path, wd in ret.items():
+            if wd < 0:
+                logging.error(
+                    "Failed to add inotify watch for '%s'!", path,
+                )
     if found_sdwdate_path:
-        GlobalData.watch_manager.add_watch(
+        ret = GlobalData.watch_manager.add_watch(
             GlobalData.sdwdate_status_path,
-            pyinotify.ALL_EVENTS,
+            watch_mask,
         )
+        for path, wd in ret.items():
+            if wd < 0:
+                logging.error(
+                    "Failed to add inotify watch for '%s'!", path,
+                )
 
 
 async def do_setup() -> bool:
