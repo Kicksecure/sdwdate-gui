@@ -360,7 +360,19 @@ async def sdwdate_status_changed() -> None:
 
     try:
         with open(GlobalData.sdwdate_status_path, "r", encoding="utf-8") as f:
-            status_dict: dict[str, str] = json.load(f)
+            status_raw: str = f.read()
+    except Exception as e:
+        logging.error("Could not read sdwdate status file", exc_info=e)
+        return
+
+    if not status_raw.strip():
+        logging.debug(
+            "sdwdate status file is empty, likely a write race condition"
+        )
+        return
+
+    try:
+        status_dict: dict[str, str] = json.loads(status_raw)
     except json.decoder.JSONDecodeError as e:
         logging.warning("Could not parse JSON from sdwdate", exc_info=e)
         return
