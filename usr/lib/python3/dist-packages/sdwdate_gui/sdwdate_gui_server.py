@@ -633,9 +633,7 @@ class SdwdateTrayIcon(QSystemTrayIcon):
         self.msg_window_type: MessageType | None = None
 
         self.icon_path: str = "/usr/share/sdwdate-gui/icons/"
-        self.error_icon: QIcon = QIcon(
-            self.icon_path + "error.png"
-        )
+        self.error_icon: QIcon = QIcon(self.icon_path + "error.png")
         self.tor_icon_list: list[QIcon] = [
             QIcon(self.icon_path + "tor-ok.png"),
             self.error_icon,
@@ -650,9 +648,7 @@ class SdwdateTrayIcon(QSystemTrayIcon):
         self.advanced_settings_icon: QIcon = QIcon(
             self.icon_path + "advancedsettings.ico"
         )
-        self.sdwdate_log_icon: QIcon = QIcon(
-            self.icon_path + "sdwdate-log.png"
-        )
+        self.sdwdate_log_icon: QIcon = QIcon(self.icon_path + "sdwdate-log.png")
         self.restart_sdwdate_icon: QIcon = QIcon(
             self.icon_path + "restart-sdwdate.png"
         )
@@ -857,7 +853,9 @@ to connect to or configure the Tor network."""
             if client.tor_status in (TorStatus.STOPPED, TorStatus.DISABLED):
                 client_icon = self.tor_icon_list[client.tor_status.value]
             else:
-                client_icon = self.sdwdate_icon_list[effective_sdwdate_status.value]
+                client_icon = self.sdwdate_icon_list[
+                    effective_sdwdate_status.value
+                ]
 
             ## Each client gets its own submenu, unless there's only one
             ## client.
