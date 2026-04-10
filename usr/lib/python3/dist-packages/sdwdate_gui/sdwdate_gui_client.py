@@ -520,6 +520,19 @@ async def find_and_handle_tor_and_sdwdate_state() -> tuple[bool, bool]:
     return found_tor_paths, found_sdwdate_path
 
 
+def setup_inotify_watch(target_path: str, watch_mask: int) -> None:
+    """
+    Sets up an inotify watch on one path, warning if the process fails.
+    """
+
+    ret: dict[str, int] = GlobalData.watch_manager.add_watch(
+        target_path, watch_mask,
+    )
+    for path, wd in ret.items():
+        if wd < 0:
+            logging.error("Failed to add inotify watch for '%s'!", path)
+
+
 async def setup_inotify_watches(
     found_tor_paths: bool,
     found_sdwdate_path: bool,
@@ -528,27 +541,28 @@ async def setup_inotify_watches(
     Creates the inotify watches.
     """
 
+    watch_mask: int = (
+        pyinotify.IN_MODIFY
+        | pyinotify.IN_CREATE
+        | pyinotify.IN_DELETE
+        | pyinotify.IN_MOVED_FROM
+        | pyinotify.IN_MOVED_TO
+        | pyinotify.IN_DELETE_SELF
+        | pyinotify.IN_MOVE_SELF
+    )
+
     GlobalData.watch_manager = pyinotify.WatchManager()
     loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
     GlobalData.notifier = pyinotify.AsyncioNotifier(
         GlobalData.watch_manager, loop, default_proc_fun=INotifyEventHandler()
     )
+
+    ## None of the paths sdwdate-gui watches need to be watched recursively.
     if found_tor_paths:
-        GlobalData.watch_manager.add_watch(
-            GlobalData.tor_path,
-            pyinotify.ALL_EVENTS,
-            rec=True,
-        )
-        GlobalData.watch_manager.add_watch(
-            GlobalData.torrc_path,
-            pyinotify.ALL_EVENTS,
-            rec=True,
-        )
+        setup_inotify_watch(GlobalData.tor_path, watch_mask)
+        setup_inotify_watch(GlobalData.torrc_path, watch_mask)
     if found_sdwdate_path:
-        GlobalData.watch_manager.add_watch(
-            GlobalData.sdwdate_status_path,
-            pyinotify.ALL_EVENTS,
-        )
+        setup_inotify_watch(GlobalData.sdwdate_status_path, watch_mask)
 
 
 async def do_setup() -> bool:
