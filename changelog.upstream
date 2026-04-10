@@ -1,3 +1,22 @@
+commit 113aacedf83dd4c0f7b401836c07f83c887e1eea
+Merge: bbdd60a c0b4b5f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Apr 10 04:21:01 2026 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit c0b4b5fb19ea57584a7f7968d4fac712bbea2b33
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Thu Apr 9 23:26:35 2026 -0400
+
+    Fix noisy JSON parse warning caused by sdwdate write race condition (from Claude Code), reformat with black
+
+commit bbdd60a3984c22f9feaec42c68642e899d2eebff
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Apr 8 17:50:58 2026 +0000
+
+    bumped changelog version
+
 commit b3aa196865fd04d1a23e7d2510998e04e4b67fb4
 Merge: aab8858 6acb9e6
 Author: Patrick Schleizer <adrelanos@whonix.org>
