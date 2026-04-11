@@ -1,3 +1,22 @@
+commit 128b27d10792b0672d36cf474cdf46dcdf8f8908
+Merge: 5e4a267 32edffb
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Apr 11 03:39:54 2026 -0400
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 32edffb7d992ef3d4fdc0728ac4fe38b86741f30
+Author: Aaron Rainbolt <arraybolt3@gmail.com>
+Date:   Fri Apr 10 17:36:28 2026 -0400
+
+    Optimize inotify watches and add error handling (from Claude Code)
+
+commit 5e4a267d0417daf3de2a215206a3b7fa6171986d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Apr 10 09:21:10 2026 +0000
+
+    bumped changelog version
+
 commit 113aacedf83dd4c0f7b401836c07f83c887e1eea
 Merge: bbdd60a c0b4b5f
 Author: Patrick Schleizer <adrelanos@whonix.org>

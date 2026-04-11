@@ -1,3 +1,9 @@
+sdwdate-gui (1:14.3-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Sat, 11 Apr 2026 08:36:24 +0000
+
 sdwdate-gui (1:14.2-1) unstable; urgency=medium
 
   * New upstream version (local package).
